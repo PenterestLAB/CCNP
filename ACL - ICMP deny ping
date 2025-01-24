@@ -2,3 +2,27 @@ R3>en
 R3#config tt
 R3(config)#ip access-list extended icmp
 R3(config-ext-nacl)#deny icmp host 10.10.2.11 host 10.10.1.10
+R3(config-ext-nacl)#permit ip any any 
+Extended IP access list icmp
+    10 deny icmp host 10.10.2.11 host 10.10.1.10
+    20 permit ip any any
+R3(config)#int e0/2
+R3(config-if)#ip access-group icmp in 
+R3(config-if)#end
+
+VPCS> show                                  
+
+NAME   IP/MASK              GATEWAY                             GATEWAY
+VPCS1  10.10.2.11/24        10.10.2.1
+       fe80::250:79ff:fe66:6808/64
+
+VPCS> ping 10.10.1.11
+84 bytes from 10.10.1.11 icmp_seq=1 ttl=62 time=2.314 ms
+84 bytes from 10.10.1.11 icmp_seq=2 ttl=62 time=2.548 ms
+VPCS> ping 10.10.1.10
+
+*10.10.2.1 icmp_seq=1 ttl=255 time=2.464 ms (ICMP type:3, code:13, Communication administratively prohibited)
+*10.10.2.1 icmp_seq=2 ttl=255 time=1.775 ms (ICMP type:3, code:13, Communication administratively prohibited)
+*10.10.2.1 icmp_seq=3 ttl=255 time=1.485 ms (ICMP type:3, code:13, Communication administratively prohibited)
+*10.10.2.1 icmp_seq=4 ttl=255 time=1.381 ms (ICMP type:3, code:13, Communication administratively prohibited)
+*10.10.2.1 icmp_seq=5 ttl=255 time=1.405 ms (ICMP type:3, code:13, Communication administratively prohibited)
