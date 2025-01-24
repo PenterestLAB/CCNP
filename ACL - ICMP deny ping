@@ -1,0 +1,4 @@
+R3>en
+R3#config tt
+R3(config)#ip access-list extended icmp
+R3(config-ext-nacl)#deny icmp host 10.10.2.11 host 10.10.1.10
