@@ -1,0 +1,55 @@
+R1#show run 
+hostname R1
+!
+boot-start-marker
+boot-end-marker
+
+!
+no aaa new-model
+
+mmi polling-interval 60
+no mmi auto-configure
+no mmi pvc
+mmi snmp-timeout 180
+       
+!         
+interface Ethernet0/0
+ ip address 10.10.1.1 255.255.255.0
+ duplex auto
+!         
+interface Ethernet0/1
+ ip address 1.1.1.1 255.255.255.252
+ duplex auto
+!         
+interface Ethernet0/2
+ ip address 3.3.3.1 255.255.255.252
+ ip access-group telnet in
+ duplex auto
+!         
+interface Ethernet0/3
+ no ip address
+ shutdown 
+ duplex auto
+!         
+!         
+router eigrp 10
+ network 0.0.0.0
+!         
+ip forward-protocol nd
+       
+no ip http server
+no ip http secure-server
+!         
+ip access-list extended telnet
+ permit tcp any any eq telnet
+ deny   tcp any any eq telnet
+ permit ip any any
+!         
+ipv6 ioam timestamp
+ 0
+ logging synchronous
+line aux 0
+line vty 0 4
+ password 123
+ login    
+ transport input telnet
